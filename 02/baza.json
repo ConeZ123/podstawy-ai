@@ -1,0 +1,505 @@
+{
+    "questions": {
+        "Q1": {
+            "text": "Jaki problem występuje w systemie Linux?",
+            "answers": [
+                "no_internet",
+                "slowness",
+                "login_problem",
+                "no_free_space_left",
+                "permissions",
+                "boot_error"
+            ]
+        },
+        "Q2": {
+            "text": "Czy problem pojawił się po aktualizacji systemu?",
+            "answers": [
+                "true",
+                "false"
+            ]
+        },
+        "Q3": {
+            "text": "Czy problem dotyczy tylko jednej aplikacji?",
+            "answers": [
+                "true",
+                "false"
+            ]
+        },
+        "Q4": {
+            "text": "Czy komputer łączy się z routerem?",
+            "answers": [
+                "true",
+                "false",
+                "not_sure"
+            ]
+        },
+        "Q5": {
+            "text": "Czy na dysku pozostało mniej niż 1 GB wolnego miejsca?",
+            "answers": [
+                "true",
+                "false",
+                "not_sure"
+            ]
+        },
+        "Q6": {
+            "text": "Czy problem dotyczy jednego użytkownika?",
+            "answers": [
+                "true",
+                "false",
+                "not_sure"
+            ]
+        },
+        "Q7": {
+            "text": "Czy pojawia się komunikat o błędzie?",
+            "answers": [
+                "true",
+                "false"
+            ]
+        },
+        "Q8": {
+            "text": "Czy komputer uruchamia się do menu bootloadera?",
+            "answers": [
+                "true",
+                "false",
+                "not_sure"
+            ]
+        },
+        "Q9": {
+            "text": "Czy problem znika po ponownym uruchomieniu?",
+            "answers": [
+                "true",
+                "false"
+            ]
+        },
+        "Q10": {
+            "text": "Czy ostatnio zmieniano konfigurację lub instalowano nowe oprogramowanie?",
+            "answers": [
+                "true",
+                "false",
+                "not_sure"
+            ]
+        }
+    },
+    "rules": [
+        {
+            "id": "R01",
+            "if": {
+                "Q1": "no_internet",
+                "Q4": "true",
+                "Q7": "false"
+            },
+            "then": {
+                "diagnosis": "Problem z DNS jest możliwy",
+                "action": "Sprawdź konfigurację DNS i spróbuj wykonać nslookup example.com."
+            }
+        },
+        {
+            "id": "R02",
+            "if": {
+                "Q1": "no_internet",
+                "Q4": "false",
+                "Q9": "false"
+            },
+            "then": {
+                "diagnosis": "Możliwy problem z połączeniem sieciowym",
+                "action": "Sprawdź kabel lub Wi-Fi, stan interfejsu sieciowego i połączenie z routerem."
+            }
+        },
+        {
+            "id": "R03",
+            "if": {
+                "Q1": "no_internet",
+                "Q2": "true",
+                "Q10": "true"
+            },
+            "then": {
+                "diagnosis": "Możliwa zmiana konfiguracji sieci po aktualizacji",
+                "action": "Sprawdź ustawienia NetworkManagera i ostatnie zmiany konfiguracji."
+            }
+        },
+        {
+            "id": "R04",
+            "if": {
+                "Q1": "no_internet",
+                "Q3": "true",
+                "Q4": "true"
+            },
+            "then": {
+                "diagnosis": "Problem może dotyczyć konfiguracji jednej aplikacji",
+                "action": "Sprawdź proxy, ustawienia aplikacji i jej dostęp do sieci."
+            }
+        },
+        {
+            "id": "R05",
+            "if": {
+                "Q1": "no_internet",
+                "Q7": "true",
+                "Q10": "true"
+            },
+            "then": {
+                "diagnosis": "Możliwy błąd po zmianie konfiguracji sieci",
+                "action": "Przeczytaj pełny komunikat i porównaj konfigurację z poprzednią."
+            }
+        },
+        {
+            "id": "R06",
+            "if": {
+                "Q1": "slowness",
+                "Q5": "true",
+                "Q3": "false"
+            },
+            "then": {
+                "diagnosis": "Niskie wolne miejsce może spowalniać system",
+                "action": "Sprawdź duże pliki i logi; zwolnij miejsce bez usuwania nieznanych plików systemowych."
+            }
+        },
+        {
+            "id": "R07",
+            "if": {
+                "Q1": "slowness",
+                "Q9": "true",
+                "Q5": "false"
+            },
+            "then": {
+                "diagnosis": "Możliwy chwilowy problem z procesem lub zasobami",
+                "action": "Sprawdź użycie CPU i RAM poleceniami top lub free -h."
+            }
+        },
+        {
+            "id": "R08",
+            "if": {
+                "Q1": "slowness",
+                "Q3": "true",
+                "Q7": "true"
+            },
+            "then": {
+                "diagnosis": "Możliwy problem z konkretną aplikacją",
+                "action": "Sprawdź logi aplikacji i jej zużycie CPU oraz pamięci."
+            }
+        },
+        {
+            "id": "R09",
+            "if": {
+                "Q1": "slowness",
+                "Q2": "true",
+                "Q10": "true"
+            },
+            "then": {
+                "diagnosis": "Możliwy wpływ aktualizacji lub nowego oprogramowania",
+                "action": "Sprawdź procesy działające w tle i dziennik systemowy."
+            }
+        },
+        {
+            "id": "R10",
+            "if": {
+                "Q1": "slowness",
+                "Q5": "false",
+                "Q9": "false"
+            },
+            "then": {
+                "diagnosis": "Spowolnienie nie wygląda na chwilowe ani związane z brakiem miejsca",
+                "action": "Sprawdź obciążenie CPU, RAM, dysku i temperatury sprzętu."
+            }
+        },
+        {
+            "id": "R11",
+            "if": {
+                "Q1": "login_problem",
+                "Q6": "true",
+                "Q7": "true"
+            },
+            "then": {
+                "diagnosis": "Problem może dotyczyć konta lub jego konfiguracji",
+                "action": "Sprawdź komunikat błędu, uprawnienia katalogu domowego i logi uwierzytelniania."
+            }
+        },
+        {
+            "id": "R12",
+            "if": {
+                "Q1": "login_problem",
+                "Q2": "true",
+                "Q10": "true"
+            },
+            "then": {
+                "diagnosis": "Możliwy problem po zmianie systemu lub konfiguracji",
+                "action": "Sprawdź ostatnie zmiany PAM, konfiguracji logowania i aktualizacje."
+            }
+        },
+        {
+            "id": "R13",
+            "if": {
+                "Q1": "login_problem",
+                "Q6": "false",
+                "Q9": "false"
+            },
+            "then": {
+                "diagnosis": "Problem logowania może mieć charakter systemowy",
+                "action": "Sprawdź usługę logowania, dysk i dzienniki systemowe."
+            }
+        },
+        {
+            "id": "R14",
+            "if": {
+                "Q1": "login_problem",
+                "Q7": "false",
+                "Q3": "false"
+            },
+            "then": {
+                "diagnosis": "Brak widocznego błędu utrudnia wskazanie przyczyny",
+                "action": "Spróbuj zalogować się do konsoli tekstowej i sprawdź logi."
+            }
+        },
+        {
+            "id": "R15",
+            "if": {
+                "Q1": "login_problem",
+                "Q5": "true",
+                "Q6": "true"
+            },
+            "then": {
+                "diagnosis": "Brak miejsca może uniemożliwiać zapis ustawień użytkownika",
+                "action": "Zwolnij bezpiecznie miejsce i sprawdź ponownie logowanie."
+            }
+        },
+        {
+            "id": "R16",
+            "if": {
+                "Q1": "no_free_space_left",
+                "Q5": "true",
+                "Q7": "true"
+            },
+            "then": {
+                "diagnosis": "Dysk lub partycja może być zapełniona",
+                "action": "Użyj df -h oraz du -sh, aby znaleźć zajęte miejsce."
+            }
+        },
+        {
+            "id": "R17",
+            "if": {
+                "Q1": "no_free_space_left",
+                "Q3": "false",
+                "Q9": "false"
+            },
+            "then": {
+                "diagnosis": "Problem z miejscem może dotyczyć całego systemu",
+                "action": "Sprawdź wszystkie zamontowane partycje poleceniem df -h."
+            }
+        },
+        {
+            "id": "R18",
+            "if": {
+                "Q1": "no_free_space_left",
+                "Q10": "true",
+                "Q7": "true"
+            },
+            "then": {
+                "diagnosis": "Nowe pliki, logi lub pakiety mogły zapełnić dysk",
+                "action": "Sprawdź ostatnio utworzone pliki i rozmiary logów."
+            }
+        },
+        {
+            "id": "R19",
+            "if": {
+                "Q1": "no_free_space_left",
+                "Q5": "true",
+                "Q6": "true"
+            },
+            "then": {
+                "diagnosis": "Zapełniony dysk może szczególnie wpływać na konto użytkownika",
+                "action": "Sprawdź miejsce w katalogu domowym oraz limity dyskowe."
+            }
+        },
+        {
+            "id": "R20",
+            "if": {
+                "Q1": "no_free_space_left",
+                "Q2": "true",
+                "Q10": "true"
+            },
+            "then": {
+                "diagnosis": "Aktualizacja mogła pozostawić dodatkowe pliki",
+                "action": "Sprawdź pamięć podręczną menedżera pakietów i stare pakiety; usuwaj je tylko znanymi narzędziami."
+            }
+        },
+        {
+            "id": "R21",
+            "if": {
+                "Q1": "permissions",
+                "Q3": "true",
+                "Q7": "true"
+            },
+            "then": {
+                "diagnosis": "Możliwy brak uprawnień do pliku lub zasobu aplikacji",
+                "action": "Sprawdź ls -l i właściciela pliku; nie używaj chmod 777 jako uniwersalnej naprawy."
+            }
+        },
+        {
+            "id": "R22",
+            "if": {
+                "Q1": "permissions",
+                "Q6": "true",
+                "Q10": "true"
+            },
+            "then": {
+                "diagnosis": "Zmiana konfiguracji mogła zmienić uprawnienia użytkownika",
+                "action": "Sprawdź grupy użytkownika poleceniem id i uprawnienia danego zasobu."
+            }
+        },
+        {
+            "id": "R23",
+            "if": {
+                "Q1": "permissions",
+                "Q7": "true",
+                "Q5": "false"
+            },
+            "then": {
+                "diagnosis": "Błąd uprawnień raczej nie wynika z braku miejsca",
+                "action": "Sprawdź właściciela, grupę, bity uprawnień i ewentualne ACL."
+            }
+        },
+        {
+            "id": "R24",
+            "if": {
+                "Q1": "permissions",
+                "Q3": "false",
+                "Q6": "false"
+            },
+            "then": {
+                "diagnosis": "Problem z uprawnieniami może obejmować wiele kont lub zasobów",
+                "action": "Sprawdź montowanie systemów plików i ogólną konfigurację uprawnień."
+            }
+        },
+        {
+            "id": "R25",
+            "if": {
+                "Q1": "permissions",
+                "Q2": "true",
+                "Q10": "true"
+            },
+            "then": {
+                "diagnosis": "Możliwa zmiana uprawnień po aktualizacji lub instalacji",
+                "action": "Sprawdź pliki konfiguracyjne i dokumentację pakietu, który zmieniał system."
+            }
+        },
+        {
+            "id": "R26",
+            "if": {
+                "Q1": "boot_error",
+                "Q8": "true",
+                "Q2": "true"
+            },
+            "then": {
+                "diagnosis": "Możliwy błąd uruchamiania po aktualizacji",
+                "action": "Z menu bootloadera spróbuj uruchomić poprzednie jądro, jeśli jest dostępne."
+            }
+        },
+        {
+            "id": "R27",
+            "if": {
+                "Q1": "boot_error",
+                "Q8": "false",
+                "Q9": "false"
+            },
+            "then": {
+                "diagnosis": "System może nie dochodzić do bootloadera",
+                "action": "Sprawdź zasilanie, ekran, ustawienia firmware i nośnik rozruchowy."
+            }
+        },
+        {
+            "id": "R28",
+            "if": {
+                "Q1": "boot_error",
+                "Q7": "true",
+                "Q10": "true"
+            },
+            "then": {
+                "diagnosis": "Możliwy problem po zmianie konfiguracji rozruchu",
+                "action": "Zapisz dokładny komunikat błędu i sprawdź ostatnie zmiany konfiguracji."
+            }
+        },
+        {
+            "id": "R29",
+            "if": {
+                "Q1": "boot_error",
+                "Q2": "false",
+                "Q8": "true"
+            },
+            "then": {
+                "diagnosis": "Błąd rozruchu nie musi być związany z aktualizacją",
+                "action": "Sprawdź wpisy bootloadera i komunikaty błędów; unikaj zmian bez kopii konfiguracji."
+            }
+        },
+        {
+            "id": "R30",
+            "if": {
+                "Q1": "boot_error",
+                "Q5": "true",
+                "Q7": "true"
+            },
+            "then": {
+                "diagnosis": "Brak miejsca mógł utrudnić aktualizację lub zapis plików systemowych",
+                "action": "Jeśli dostępne jest środowisko ratunkowe, sprawdź miejsce na partycji systemowej."
+            }
+        },
+        {
+            "id": "R31",
+            "if": {
+                "Q1": "slowness",
+                "Q7": "true",
+                "Q10": "false"
+            },
+            "then": {
+                "diagnosis": "Spowolnieniu towarzyszy błąd, ale nie zgłoszono zmian",
+                "action": "Zanotuj komunikat i sprawdź dziennik systemowy oraz zasoby."
+            }
+        },
+        {
+            "id": "R32",
+            "if": {
+                "Q1": "no_internet",
+                "Q9": "true",
+                "Q4": "true"
+            },
+            "then": {
+                "diagnosis": "Ponowne uruchomienie chwilowo przywraca sieć",
+                "action": "Sprawdź stabilność sterownika, dzierżawę DHCP i logi NetworkManagera."
+            }
+        },
+        {
+            "id": "R33",
+            "if": {
+                "Q1": "login_problem",
+                "Q5": "false",
+                "Q6": "true"
+            },
+            "then": {
+                "diagnosis": "Problem może być ograniczony do ustawień jednego konta",
+                "action": "Sprawdź powłokę użytkownika, katalog domowy i uprawnienia do plików profilu."
+            }
+        },
+        {
+            "id": "R34",
+            "if": {
+                "Q1": "permissions",
+                "Q6": "true",
+                "Q9": "false"
+            },
+            "then": {
+                "diagnosis": "Problem uprawnień utrzymuje się po ponownym uruchomieniu",
+                "action": "Zweryfikuj właściciela i uprawnienia konkretnego pliku lub katalogu."
+            }
+        },
+        {
+            "id": "R35",
+            "if": {
+                "Q1": "no_free_space_left",
+                "Q3": "true",
+                "Q7": "true"
+            },
+            "then": {
+                "diagnosis": "Jedna aplikacja może zgłaszać brak miejsca w swoim katalogu",
+                "action": "Sprawdź partycję i katalog tymczasowy używany przez aplikację."
+            }
+        }
+    ]
+}
