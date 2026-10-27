@@ -22,7 +22,6 @@ def ask_questions(questions):
     return answers
 
 def rule_matches(rule, answers):
-    # Reguła pasuje, gdy wszystkie warunki IF są spełnione (AND).
     for question_id, expected_answer in rule["if"].items():
         if answers.get(question_id) != expected_answer:
             return False
